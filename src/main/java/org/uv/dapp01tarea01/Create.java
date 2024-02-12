@@ -153,25 +153,26 @@ public class Create extends javax.swing.JFrame {
                 Logger.getLogger(Create.class.getName()).log(Level.
                     SEVERE, null, ex);
             }
+            finally{
+                if(con!=null){
+                    try {
+                        con.close();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Read.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                if(st!=null){
+                    try {
+                        st.close();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Read.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
         }
         else{
             JOptionPane.showMessageDialog(null,"Información deficiente", 
                     "ERROR_MESAGGE", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        if(con!=null){
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Read.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if(st!=null){
-            try {
-                st.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Read.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }//GEN-LAST:event_createActionPerformed
 
