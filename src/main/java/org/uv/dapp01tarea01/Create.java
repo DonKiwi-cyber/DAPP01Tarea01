@@ -4,12 +4,6 @@
  */
 package org.uv.dapp01tarea01;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,8 +12,6 @@ import javax.swing.JOptionPane;
  */
 public class Create extends javax.swing.JFrame {
 
-    private Connection con = null;
-    private PreparedStatement st = null;
     Main main = null;
     /**
      * Creates new form Interfaz
@@ -134,40 +126,20 @@ public class Create extends javax.swing.JFrame {
         String phone = PhoneTextField.getText();
         
         if(id != null && name != null && address != null && phone != null){
-            try {
-                String url = "jdbc:postgresql://localhost:5432/dapptarea01";
-                String pwd = "ian211002";
-                String usr = "postgres";
-                con = DriverManager.getConnection(url, usr, pwd);
+            PojoEmpleado emp = new PojoEmpleado();
+            emp.setNombre(name);
+            emp.setDireccion(address);
+            emp.setTelefono(phone);
             
-                con.setAutoCommit(false);
+            DAOEmpleado dao = new DAOEmpleado();
+            boolean res = dao.guardar(emp);
             
-                String sql = "insert into empleadotemporal (id, nombre, direccion, telefono) values "
-                    + "('"+id+"', '"+name+"', '"+address+"', '"+phone+"')";
-                st = con.prepareStatement(sql);
-                st.execute();
-                con.commit();
-            
-                JOptionPane.showMessageDialog(null,"Se ha creado el empleado");
-            } catch (SQLException ex) {
-                Logger.getLogger(Create.class.getName()).log(Level.
-                    SEVERE, null, ex);
+            if(res){
+                JOptionPane.showMessageDialog(null,"Empleado guardado");
             }
-            finally{
-                if(con!=null){
-                    try {
-                        con.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Read.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                if(st!=null){
-                    try {
-                        st.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Read.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+            else{
+                JOptionPane.showMessageDialog(null,"Error...", 
+                    "ERROR_MESAGGE", JOptionPane.ERROR_MESSAGE);
             }
         }
         else{
