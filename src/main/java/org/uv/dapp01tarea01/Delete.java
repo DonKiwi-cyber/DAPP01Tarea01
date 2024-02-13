@@ -4,12 +4,6 @@
  */
 package org.uv.dapp01tarea01;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,8 +12,7 @@ import javax.swing.JOptionPane;
  */
 public class Delete extends javax.swing.JFrame {
 
-    private Connection con = null;
-    private PreparedStatement st = null;
+    DAOEmpleado dao = null;
     Main main = null;
     /**
      * Creates new form Delete
@@ -119,44 +112,12 @@ public class Delete extends javax.swing.JFrame {
         String name = NameTextField.getText();
 
         if(id != null && name != null){
-            try {
-                String url = "jdbc:postgresql://localhost:5432/dapptarea01";
-                String pwd = "ian211002";
-                String usr = "postgres";
-                con = DriverManager.getConnection(url, usr, pwd);
-
-                con.setAutoCommit(false);
-
-                String sql = "delete from empleadotemporal where"
-                + " id = "+id+" and nombre = "+name;
-                st = con.prepareStatement(sql);
-                st.execute();
-                con.commit();
-
-                JOptionPane.showMessageDialog(null,"Se ha eliminado el empleado");
-            } catch (SQLException ex) {
-                Logger.getLogger(Create.class.getName()).log(Level.
-                    SEVERE, null, ex);
-            }
+            dao = new DAOEmpleado();
+            dao.eliminar(id, name);
         }
         else{
             JOptionPane.showMessageDialog(null,"Información deficiente",
                 "ERROR_MESAGGE", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        if(con!=null){
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Read.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if(st!=null){
-            try {
-                st.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Read.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }//GEN-LAST:event_createActionPerformed
 

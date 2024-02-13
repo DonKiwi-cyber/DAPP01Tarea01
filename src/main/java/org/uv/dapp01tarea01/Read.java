@@ -4,13 +4,12 @@
  */
 package org.uv.dapp01tarea01;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,10 +18,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Read extends javax.swing.JFrame {
 
-    private Connection con = null;
-    private PreparedStatement st = null;
-    private ResultSet rs = null;
-    private DefaultTableModel tblModel = null;
+    ResultSet rs = null;
+    DefaultTableModel tblModel = null;
+    DAOEmpleado dao = null;
     Main main = null;
     
     /**
@@ -123,46 +121,23 @@ public class Read extends javax.swing.JFrame {
 
     private void ReadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReadButtonActionPerformed
         // TODO add your handling code here:
-        try {
-            // TODO add your handling code here:
-            String url = "jdbc:postgresql://localhost:5432/dapptarea01";
-            String pwd = "ian211002";
-            String usr = "postgres";
-            con = DriverManager.getConnection(url, usr, pwd);
-            
-            String sql = "Select * from empleadotemporal";
-            
-            st = con.prepareStatement(sql);
-            rs = st.executeQuery();
-            
-            while(rs.next()){
-                String id = String.valueOf(rs.getInt("id"));
-                String name = rs.getString("nombre");
-                String address = rs.getString("direccion");
-                String phone = rs.getString("telefono");
+        tblModel = (DefaultTableModel)jTable1.getModel();
+        dao = new DAOEmpleado();
+        ArrayList<PojoEmpleado> list = dao.buscarAll();
+        if(!list.isEmpty()){
+            for (int i = 0; i < list.size(); i++){
+                String id = String.valueOf(list.get(i).getId());
+                String name = list.get(i).getNombre();
+                String address = list.get(i).getDireccion();
+                String phone = list.get(i).getTelefono();
                 
                 String tbData[] = {id, name, address, phone};
-                tblModel = (DefaultTableModel)jTable1.getModel();
                 
                 tblModel.addRow(tbData);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Read.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        if(con!=null){
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Read.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if(st!=null){
-            try {
-                st.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Read.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        else{
+            JOptionPane.showMessageDialog(null,"No existen datos");
         }
     }//GEN-LAST:event_ReadButtonActionPerformed
 

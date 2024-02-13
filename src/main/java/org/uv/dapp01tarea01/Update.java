@@ -4,12 +4,6 @@
  */
 package org.uv.dapp01tarea01;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,8 +12,8 @@ import javax.swing.JOptionPane;
  */
 public class Update extends javax.swing.JFrame {
 
-    private Connection con = null;
-    private PreparedStatement st = null;
+    DAOEmpleado dao = null;
+    PojoEmpleado pojo = null;
     Main main = null;
     /**
      * Creates new form Modificate
@@ -143,25 +137,13 @@ public class Update extends javax.swing.JFrame {
         String phone = PhoneTextField.getText();
 
         if(id != null && name != null && address != null && phone != null){
-            try {
-                String url = "jdbc:postgresql://localhost:5432/dapptarea01";
-                String pwd = "ian211002";
-                String usr = "postgres";
-                con = DriverManager.getConnection(url, usr, pwd);
-
-                con.setAutoCommit(false);
-
-                String sql = "update empleadotemporal set "
-                + "nombre = "+name+", direccion = "+address+", telefono = "+phone+" where id = "+id;
-                st = con.prepareStatement(sql);
-                st.execute();
-                con.commit();
-
-                JOptionPane.showMessageDialog(null,"Se ha actualizado la información del empleado");
-            } catch (SQLException ex) {
-                Logger.getLogger(Create.class.getName()).log(Level.
-                    SEVERE, null, ex);
-            }
+            dao = new DAOEmpleado();
+            pojo = new PojoEmpleado();
+            pojo.setId(id);
+            pojo.setNombre(name);
+            pojo.setDireccion(address);
+            pojo.setTelefono(phone);
+            dao.modificar(pojo);
         }
         else{
             JOptionPane.showMessageDialog(null,"Información deficiente",
