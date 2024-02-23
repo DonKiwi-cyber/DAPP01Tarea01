@@ -11,13 +11,7 @@ import java.util.List;
  *
  * @author ian
  */
-public abstract class SelectionDB<T> {
+public abstract class SelectionDB<T, ID> {
     
-    protected T t;
-    
-    public SelectionDB(T t){
-        this.t = t;
-    }
-    
-    public abstract List<T> select(Connection con);
+    public abstract List<T> find(Connection con);
 }

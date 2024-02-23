@@ -88,6 +88,6 @@ public class ConexionDB {
     }
     
     public List select(SelectionDB sel){
-        return sel.select(con);
+        return sel.find(con);
     }
 }
