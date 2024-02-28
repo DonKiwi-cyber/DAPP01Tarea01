@@ -15,7 +15,7 @@ import org.hibernate.Transaction;
 public class DAPP01Tarea01V4 {
 
     public static void main(String[] args) {
-        SessionFactory sf = hibernateUtil.getSessionFactory();
+        SessionFactory sf = HibernateUtil.getSessionFactory();
         
         PojoEmpleado emp = new PojoEmpleado();
         emp.setNombre("Ian");
@@ -27,6 +27,6 @@ public class DAPP01Tarea01V4 {
         
         session.save(emp);
         tra.commit();
-        System.out.println("Se guardó con ID: "+ emp.getId());
+        
     }
 }
